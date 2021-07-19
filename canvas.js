@@ -25,8 +25,8 @@ class Canvas {
         this.canvas = element;
         this.tickNum = 0;
         this.objects = [];
-        this.resetCanvas();
         this.camera = new Camera(this);
+        this.resetCanvas();
         this.add(this.camera, this.constructor.LAYER_UI);
         this.input = new Input(this.camera);
         this.assets = new AssetRepository();
@@ -46,6 +46,8 @@ class Canvas {
         this.canvas.width = this.width;
         this.canvas.height = this.height;
         this.ctx = this.canvas.getContext('2d');
+        this.ctx.imageSmoothingEnabled = false;
+        this.camera.applyTransformation();
         console.log("reset to", this.width, this.height);
     }
 

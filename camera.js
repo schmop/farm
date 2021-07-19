@@ -30,7 +30,12 @@ export class Camera {
     }
 
     view() {
-        return new Rect(this.pos.x, this.pos.y, this.width + this.pos.x, this.height + this.pos.y);
+        return new Rect(
+            this.pos.x,
+            this.pos.y,
+            this.width + this.pos.x,
+            this.height + this.pos.y
+        );
     }
 
     /**

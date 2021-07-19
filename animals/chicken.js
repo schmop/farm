@@ -4,8 +4,7 @@ import {FarmAnimal} from "./farm-animal.js";
 
 export class Chicken extends FarmAnimal {
     constructor(pos, color = null) {
-        super(pos);
-        this.color = color || this.getRandomColor();
+        super(pos, color);
     }
 
     get size() {
@@ -22,10 +21,6 @@ export class Chicken extends FarmAnimal {
 
     get speed() {
         return 0.5;
-    }
-
-    get SNACK_DISTANCE() {
-        return 10;
     }
 
     get COLOR_OFFSET() {
@@ -60,22 +55,5 @@ export class Chicken extends FarmAnimal {
      */
     render(canvas) {
         super.render(canvas);
-    }
-
-    getSpritePosition() {
-        const spritePositions = this.spritePositionsByLookDirection();
-
-        return spritePositions[this.animationIndex % spritePositions.length]
-            .scale(this.size)
-            .add(this.COLOR_OFFSET[this.color].mult(this.OFFSET_SIZE))
-            .add(1, 1)
-        ;
-    }
-
-
-    getRandomColor() {
-        const colors = Object.keys(this.COLOR_OFFSET);
-
-        return colors[Math.floor(Math.random() * colors.length)];
     }
 }

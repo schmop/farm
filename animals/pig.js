@@ -2,7 +2,7 @@ import Vec from "../vec.js";
 import {Explosion} from "../explosion.js";
 import {FarmAnimal} from "./farm-animal.js";
 
-export class Cow extends FarmAnimal {
+export class Pig extends FarmAnimal {
     constructor(pos, color = null) {
         super(pos, color);
     }
@@ -16,7 +16,7 @@ export class Cow extends FarmAnimal {
     }
 
     get SPRITE_SET() {
-        return 'cow';
+        return 'pig';
     }
 
     get speed() {

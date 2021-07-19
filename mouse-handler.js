@@ -1,3 +1,5 @@
+import {Camera} from "./camera.js";
+
 export class MouseHandler {
     /**
      * @param {Canvas} canvas
@@ -5,7 +7,7 @@ export class MouseHandler {
     constructor(canvas) {
         const {input, camera} = canvas;
         input.onClick(event => {
-            camera.lockToObj(canvas.closestObject(input.mouseWorldPos));
+            camera.lockToObj(canvas.closestObject(input.mouseWorldPos, obj => !(obj instanceof Camera)));
         });
 
         input.onWheel(event => {

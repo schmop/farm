@@ -2,13 +2,13 @@ import Vec from "../vec.js";
 import {fillCircle} from "../graphics.js";
 
 export class FarmAnimal {
-    constructor(pos) {
+    constructor(pos, color = null) {
         this.pos = pos.clone();
         this.path = [];
         this.direction = new Vec(0,0);
         this.lookDirection = 'down';
         this.animationIndex = 0;
-        this.color = null;
+        this.color = color || this.getRandomColor();
     }
 
     get SPRITE_SET() {
@@ -133,8 +133,8 @@ export class FarmAnimal {
 
         ctx.drawImage(
             assets.get(this.SPRITE_SET),
-            spritePosition.x + 1,
-            spritePosition.y + 1,
+            spritePosition.x,
+            spritePosition.y,
             this.size,
             this.size,
             renderPos.x,
@@ -167,9 +167,12 @@ export class FarmAnimal {
     }
 
     getSpritePosition() {
-        const positions = this.spritePositionsByLookDirection();
+        const spritePositions = this.spritePositionsByLookDirection();
 
-        return positions[this.animationIndex % positions.length];
+        return spritePositions[this.animationIndex % spritePositions.length]
+            .scale(this.size)
+            .add(this.COLOR_OFFSET[this.color].mult(this.OFFSET_SIZE))
+        ;
     }
 
     spritePositionsByLookDirection() {
@@ -206,5 +209,11 @@ export class FarmAnimal {
         if (Math.PI * 3 / 2 <= angle && angle < Math.PI * 2) {
             this.lookDirection = 'left';
         }
+    }
+
+    getRandomColor() {
+        const colors = Object.keys(this.COLOR_OFFSET);
+
+        return colors[Math.floor(Math.random() * colors.length)];
     }
 }
