@@ -26,8 +26,12 @@ export default class Vec {
         return this.scale(1 / this.length());
     }
 
-    round(step) {
+    floor(step) {
         return new Vec(Math.floor(this.x / step) * step, Math.floor(this.y / step) * step);
+    }
+
+    round(step) {
+        return new Vec(Math.round(this.x / step) * step, Math.round(this.y / step) * step);
     }
 
     scale(factor) {

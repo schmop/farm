@@ -4,9 +4,10 @@ import {KeyHandler} from "./key-handler.js";
 import {Camera} from "./camera.js";
 import {AssetRepository} from "./asset-repository.js";
 import {Background} from "./background.js";
-import {Beaver} from "./animals/beaver.js";
 import {Tree} from "./tree.js";
 import {MouseHandler} from "./mouse-handler.js";
+import {Tilemap} from "./map/tilemap.js";
+import {Soil} from "./map/soil.js";
 
 class Canvas {
     static get LAYER_BACKGROUND() {
@@ -30,6 +31,8 @@ class Canvas {
         this.add(this.camera, this.constructor.LAYER_UI);
         this.input = new Input(this.camera);
         this.assets = new AssetRepository();
+        this.tilemap = new Tilemap(new Soil());
+        this.add(this.tilemap, this.constructor.LAYER_SCENE);
     }
 
     get biggerDimension() {

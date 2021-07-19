@@ -143,9 +143,9 @@ export class FarmAnimal {
             this.size
         );
 
-        this.path.forEach(pos => {
-            fillCircle(ctx, pos, 5);
-        });
+        /*this.path.forEach(pos => {
+            fillCircle(ctx, pos, 1);
+        });*/
     }
 
     setGoal(goal) {

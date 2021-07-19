@@ -32,8 +32,5 @@ export class Tree {
 
         ctx.drawImage(assets.get('tree'), this.renderPos.x, this.renderPos.y, this.width, this.height);
         ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-        if (this.rect.contains(input.mouseWorldPos)) {
-            ctx.fillRect(this.renderPos.x, this.renderPos.y, this.width, this.height);
-        }
     }
 }

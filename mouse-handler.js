@@ -1,4 +1,4 @@
-import {Camera} from "./camera.js";
+import {Grid} from "./map/grid.js";
 
 export class MouseHandler {
     /**
@@ -7,7 +7,7 @@ export class MouseHandler {
     constructor(canvas) {
         const {input, camera} = canvas;
         input.onClick(event => {
-            camera.lockToObj(canvas.closestObject(input.mouseWorldPos, obj => !(obj instanceof Camera)));
+            canvas.tilemap.setBlock(Grid.toGrid(input.mouseWorldPos), canvas.tilemap.tileset.randomTile());
         });
 
         input.onWheel(event => {

@@ -6,6 +6,7 @@ import {Sheep} from "./animals/sheep.js";
 import {Pig} from "./animals/pig.js";
 import {Goat} from "./animals/goat.js";
 import {FarmAnimal} from "./animals/farm-animal.js";
+import {Camera} from "./camera.js";
 
 export class KeyHandler {
     get speed() {
@@ -33,6 +34,11 @@ export class KeyHandler {
 
         if (input.keydown('Escape')) {
             camera.unlock();
+        }
+        if (input.keydown('Space')) {
+            camera.lockToObj(
+                canvas.closestObject(input.mouseWorldPos, obj => !(obj instanceof Camera))
+            );
         }
 
         if (input.keypressed('1')) {

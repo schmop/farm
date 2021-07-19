@@ -23,6 +23,7 @@ export class AssetRepository {
             'goat': './img/goat.png',
             'sheep': './img/sheep.png',
             'pig': './img/pig.png',
+            'plowed_soil': './img/tilesets/plowed_soil.png',
         };
         Object.entries(sources).forEach(([name, path]) => this.addImage(name, path));
     }
