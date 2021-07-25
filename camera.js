@@ -3,11 +3,18 @@ import {Rect} from "./rect.js";
 
 export class Camera {
     constructor(canvas) {
+        const {input} = canvas;
         this.canvas = canvas;
         this.zoom = 1;
         this.pos = new Vec(0, 0);
         this.rotateAngle = 0;
         this.lockedObject = null;
+
+        input.onWheel(event => {
+            const scale = -Math.sign(event.deltaY) * 0.1;
+            const mousePos = input.mousePos.clone();
+            canvas.camera.zoomBy(scale, mousePos);
+        });
     }
 
     get ctx() {
@@ -127,9 +134,11 @@ export class Camera {
      * @param {Canvas} canvas
      */
     render(canvas) {
-        const {ctx} = canvas;
-        const view = this.view();
-        ctx.strokeStyle = "white";
-        ctx.strokeRect(view.x + 10, view.y + 10, view.width - 10, view.height - 10);
+        if (false) {
+            const {ctx} = canvas;
+            const view = this.view();
+            ctx.strokeStyle = "white";
+            ctx.strokeRect(view.x + 10, view.y + 10, view.width - 10, view.height - 10);
+        }
     }
 }

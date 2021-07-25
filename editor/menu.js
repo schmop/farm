@@ -1,14 +1,33 @@
 import Vec from "../vec.js";
-import {fillRoundRect, fillTextCentered} from "../graphics.js";
+import {fillRoundRect, fillTextCentered, strokeRoundRect} from "../graphics.js";
 import {Rect} from "../rect.js";
+import Button from "../ui/button.js";
+import {BrushSelection} from "./brush-selection.js";
 
 export default class Menu {
-    constructor() {
+    /**
+     * @param {Editor} editor
+     */
+    constructor(editor) {
+        this.editor = editor;
         this.open = false;
         this.pos = new Vec(50, 50);
-        this.size = new Vec(300, 500);
+        this.size = new Vec(500, 700);
         this.children = [
-            new Button(new Rect(100, 100, 200, 150), "Click me", "red"),
+            new Button(
+                "Click me",
+                new Rect(100, 100, 200, 150),
+                btn => {
+                    btn.label = "Clicked!";
+                    console.log("CLICKED");
+                },
+                this
+            ),
+            new BrushSelection(
+                new Vec(10, 170),
+                //new Rect(10, 170, 410, 570),
+                this
+            )
         ];
     }
 
@@ -24,6 +43,7 @@ export default class Menu {
 
         if (this.open) {
             this.children.forEach(child => child.update(canvas));
+            canvas.skipGameUpdate();
         }
     }
 
@@ -36,7 +56,9 @@ export default class Menu {
         }
         const {ctx} = canvas;
         ctx.fillStyle = "black";
+        ctx.strokeStyle = "white";
         fillRoundRect(ctx, Rect.bySize(this.pos, this.size), 30);
+        strokeRoundRect(ctx, Rect.bySize(this.pos, this.size), 30);
         ctx.fillStyle = "white";
         fillTextCentered(ctx, "Tileset", this.pos.add(0, 20), this.size.x);
 

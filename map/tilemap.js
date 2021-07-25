@@ -1,4 +1,5 @@
 import {Grid} from "./grid.js";
+import {Tile} from "./tile.js";
 
 export class Tilemap {
     /**
@@ -25,7 +26,7 @@ export class Tilemap {
      * @param {Canvas} canvas
      */
     render(canvas) {
-        const {ctx, camera, assets} = canvas;
+        const {camera} = canvas;
 
         const numX = camera.width / Grid.size + 1;
         const numY = camera.height / Grid.size + 1;
@@ -36,8 +37,7 @@ export class Tilemap {
                 const pos = startPos.add(i, j);
                 const block = this.blocks.get(pos.toString());
                 if (block) {
-                    const worldPos = Grid.toWorld(pos);
-                    ctx.drawImage(assets.get(this.tileset.getAsset()), block.spritePos.x, block.spritePos.y, Grid.size, Grid.size, worldPos.x, worldPos.y, Grid.size, Grid.size);
+                    block.render(canvas, Grid.toWorld(pos));
                 }
             }
         }

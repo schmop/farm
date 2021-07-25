@@ -3,12 +3,10 @@ import {Input} from "./input.js";
 import {KeyHandler} from "./key-handler.js";
 import {Camera} from "./camera.js";
 import {AssetRepository} from "./asset-repository.js";
-import {Background} from "./background.js";
-import {Tree} from "./tree.js";
-import {MouseHandler} from "./mouse-handler.js";
 import {Tilemap} from "./map/tilemap.js";
-import {Soil} from "./map/soil.js";
-import Menu from "./editor/menu.js";
+import {Ground} from "./map/ground.js";
+import Editor from "./editor/editor.js";
+import {Brush} from "./editor/brush.js";
 
 class Canvas {
     static get LAYER_BACKGROUND() {
@@ -19,8 +17,12 @@ class Canvas {
         return 1;
     }
 
-    static get LAYER_UI() {
+    static get LAYER_OVERLAY() {
         return 2;
+    }
+
+    static get LAYER_UI() {
+        return 3;
     }
 
     constructor(element) {
@@ -28,13 +30,12 @@ class Canvas {
         this.tickNum = 0;
         this.objects = [];
         this.uiObjects = [];
+        this.skipUpdate = false;
+        this.input = new Input(this);
         this.camera = new Camera(this);
         this.resetCanvas();
         this.add(this.camera);
-        this.input = new Input(this.camera);
         this.assets = new AssetRepository();
-        this.tilemap = new Tilemap(new Soil());
-        this.add(this.tilemap, this.constructor.LAYER_SCENE);
     }
 
     get biggerDimension() {
@@ -86,17 +87,23 @@ class Canvas {
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(cameraView.x, cameraView.y, cameraView.width, cameraView.height);
 
-        this.uiObjects.forEach(object => {
+        this.skipUpdate = false;
+
+        this.uiObjects.some(object => {
             if (typeof object.update === 'function') {
-                object.update(this);
+                return object.update(this);
             }
+
+            return true;
         });
 
-        this.objects.forEach(object => {
-            if (typeof object.update === 'function') {
-                object.update(this);
-            }
-        });
+        if (!this.skipUpdate) {
+            this.objects.forEach(object => {
+                if (typeof object.update === 'function') {
+                    object.update(this);
+                }
+            });
+        }
 
         this.objects.forEach(object => {
             if (typeof object.render === 'function') {
@@ -115,6 +122,10 @@ class Canvas {
 
         this.tickNum++;
         requestAnimationFrame(this.tick.bind(this));
+    }
+
+    skipGameUpdate() {
+        this.skipUpdate = true;
     }
 
     closestObject(pos, constraint = null) {
@@ -148,14 +159,14 @@ class Canvas {
 }
 
 window.Canvas = new Canvas(document.getElementById("mieps"));
-window.Canvas.add(new Background(), Canvas.LAYER_BACKGROUND);
-[...Array(60)].forEach(() => {
-    window.Canvas.add(new Tree(new Vec(Math.random() * 2000 - 500, Math.random() * 2000 - 500)));
-});
+
 window.Canvas.add(new KeyHandler());
 
-window.Canvas.add(new MouseHandler(window.Canvas));
-window.Canvas.add(new Menu(), Canvas.LAYER_UI);
+const tilemap = new Tilemap(new Ground());
+const brush = new Brush([tilemap.tileset.randomTile()], 1);
+window.Canvas.add(brush, Canvas.LAYER_OVERLAY);
+window.Canvas.add(new Editor(tilemap, brush), Canvas.LAYER_UI);
+window.Canvas.add(tilemap, Canvas.LAYER_SCENE);
 
 window.Canvas.init();
 

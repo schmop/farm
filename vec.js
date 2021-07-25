@@ -26,7 +26,11 @@ export default class Vec {
         return this.scale(1 / this.length());
     }
 
-    floor(step) {
+    ceil(step = 1) {
+        return new Vec(Math.ceil(this.x / step) * step, Math.ceil(this.y / step) * step);
+    }
+
+    floor(step = 1) {
         return new Vec(Math.floor(this.x / step) * step, Math.floor(this.y / step) * step);
     }
 

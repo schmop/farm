@@ -7,11 +7,27 @@ export class Rect {
     }
 
     static byCorners(tl, tr, br, bl) {
-        return new this(tl, tr, br, bl);
+        return new Rect(tl, tr, br, bl);
     }
 
+    /**
+     * @param {Vec} pos
+     * @param {Vec} size
+     */
     static bySize(pos, size) {
-        return new this(pos.x, pos.y, pos.x + size.x, pos.y + size.y);
+        return new Rect(pos.x, pos.y, pos.x + size.x, pos.y + size.y);
+    }
+
+    /**
+     * @param {Vec} offset
+     */
+    translate(offset) {
+        return new Rect(
+            this.left + offset.x,
+            this.top + offset.y,
+            this.right + offset.x,
+            this.bottom + offset.y
+        );
     }
 
     get x() {
