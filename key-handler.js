@@ -32,10 +32,10 @@ export class KeyHandler {
         }
         camera.moveBy(movement.scale(-this.speed));
 
-        if (input.keydown('Escape')) {
+        if (input.keypressed('Escape')) {
             camera.unlock();
         }
-        if (input.keydown('Space')) {
+        if (input.keypressed(' ')) {
             camera.lockToObj(
                 canvas.closestObject(input.mouseWorldPos, obj => !(obj instanceof Camera))
             );

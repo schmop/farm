@@ -23,10 +23,20 @@ export class Camera {
     }
 
     applyTransformation() {
-        this.ctx.resetTransform();
+        this.resetTransform();
         this.ctx.scale(this.zoom, this.zoom);
         //this.ctx.rotate(this.rotateAngle);
         this.ctx.translate(-this.pos.x, -this.pos.y);
+    }
+
+    resetTransform() {
+        this.ctx.resetTransform();
+    }
+
+    withoutTransform(callback) {
+        this.resetTransform();
+        callback();
+        this.applyTransformation();
     }
 
     view() {

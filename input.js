@@ -9,6 +9,9 @@ export class Input {
         document.addEventListener('keydown', event => {
             this.keydowns.add(event.key);
             this.keypresses.add(event.key);
+            if (event.key === 'Tab') {
+                event.preventDefault();
+            }
         });
         document.addEventListener('keyup', event => {
             this.keydowns.delete(event.key);

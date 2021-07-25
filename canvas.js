@@ -8,6 +8,7 @@ import {Tree} from "./tree.js";
 import {MouseHandler} from "./mouse-handler.js";
 import {Tilemap} from "./map/tilemap.js";
 import {Soil} from "./map/soil.js";
+import Menu from "./editor/menu.js";
 
 class Canvas {
     static get LAYER_BACKGROUND() {
@@ -26,9 +27,10 @@ class Canvas {
         this.canvas = element;
         this.tickNum = 0;
         this.objects = [];
+        this.uiObjects = [];
         this.camera = new Camera(this);
         this.resetCanvas();
-        this.add(this.camera, this.constructor.LAYER_UI);
+        this.add(this.camera);
         this.input = new Input(this.camera);
         this.assets = new AssetRepository();
         this.tilemap = new Tilemap(new Soil());
@@ -62,6 +64,10 @@ class Canvas {
 
     add(object, layer = this.constructor.LAYER_BACKGROUND) {
         object.layer = layer;
+        if (layer === this.constructor.LAYER_UI) {
+            this.uiObjects.push(object);
+            return;
+        }
 
         this.objects.push(object);
         this.objects.sort((a,b) => a.layer - b.layer);
@@ -72,12 +78,19 @@ class Canvas {
             object.onRemove(this);
         }
         this.objects = this.objects.filter(obj => obj !== object);
+        this.uiObjects = this.uiObjects.filter(obj => obj !== object);
     }
 
     tick() {
         const cameraView = this.camera.view();
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(cameraView.x, cameraView.y, cameraView.width, cameraView.height);
+
+        this.uiObjects.forEach(object => {
+            if (typeof object.update === 'function') {
+                object.update(this);
+            }
+        });
 
         this.objects.forEach(object => {
             if (typeof object.update === 'function') {
@@ -91,6 +104,13 @@ class Canvas {
             }
         });
 
+        this.camera.withoutTransform(() => {
+            this.uiObjects.forEach(object => {
+                if (typeof object.render === 'function') {
+                    object.render(this);
+                }
+            });
+        });
         this.input.update(this);
 
         this.tickNum++;
@@ -135,6 +155,7 @@ window.Canvas.add(new Background(), Canvas.LAYER_BACKGROUND);
 window.Canvas.add(new KeyHandler());
 
 window.Canvas.add(new MouseHandler(window.Canvas));
+window.Canvas.add(new Menu(), Canvas.LAYER_UI);
 
 window.Canvas.init();
 
