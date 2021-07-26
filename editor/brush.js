@@ -43,7 +43,11 @@ export class Brush {
     render(canvas) {
         const {input} = canvas;
         const startPos = Grid.snap(input.mouseWorldPos)
-            .sub(Math.floor(this.width / 2), Math.floor(this.height / 2))
+            .sub(new Vec(this.width, this.height)
+                .half()
+                .floor()
+                .scale(Grid.size)
+            )
         ;
 
         for (let i = 0; i < this.tiles.length; i++) {

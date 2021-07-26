@@ -7,6 +7,7 @@ import {Tilemap} from "./map/tilemap.js";
 import {Ground} from "./map/ground.js";
 import Editor from "./editor/editor.js";
 import {Brush} from "./editor/brush.js";
+import {PipetteTool} from "./editor/pipette-tool.js";
 
 class Canvas {
     static get LAYER_BACKGROUND() {
@@ -164,8 +165,11 @@ window.Canvas.add(new KeyHandler());
 
 const tilemap = new Tilemap(new Ground());
 const brush = new Brush([tilemap.tileset.randomTile()], 1);
+const editor = new Editor(tilemap, brush);
+const pipette = new PipetteTool(editor);
 window.Canvas.add(brush, Canvas.LAYER_OVERLAY);
-window.Canvas.add(new Editor(tilemap, brush), Canvas.LAYER_UI);
+window.Canvas.add(pipette, Canvas.LAYER_OVERLAY);
+window.Canvas.add(editor, Canvas.LAYER_UI);
 window.Canvas.add(tilemap, Canvas.LAYER_SCENE);
 
 window.Canvas.init();

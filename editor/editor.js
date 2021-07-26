@@ -2,7 +2,6 @@ import {Brush} from "./brush.js";
 import {Grid} from "../map/grid.js";
 import Menu from "./menu.js";
 import Vec from "../vec.js";
-import {PipetteTool} from "./pipette-tool.js";
 
 export default class Editor {
     /**
@@ -15,7 +14,6 @@ export default class Editor {
         this.menu = new Menu(this);
         this.selection = null;
         this.children = [
-            new PipetteTool(this),
             this.menu,
         ];
     }
@@ -36,9 +34,14 @@ export default class Editor {
     }
 
     drawToPos(pos) {
-        pos = Grid.toGrid(pos);
-        for (let x = -Math.floor(this.brush.width / 2); x < this.brush.width; x++) {
-            for (let y = -Math.floor(this.brush.height / 2); x < this.brush.width; x++) {
+        pos = Grid.toGrid(pos)
+            .sub(new Vec(this.brush.width, this.brush.height)
+                .half()
+                .floor()
+            )
+        ;
+        for (let x = 0; x < this.brush.width; x++) {
+            for (let y = 0; y < this.brush.height; y++) {
                 this.map.setBlock(pos.add(x, y), this.brush.get(x,y));
             }
         }

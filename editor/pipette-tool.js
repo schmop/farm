@@ -14,22 +14,22 @@ export class PipetteTool {
         const {input} = canvas;
 
         if (!input.rightMouseDown && this.selection) {
-            const selectionTo = input.mouseWorldPos.ceil(Grid.size);
-            const smallestDimensions = new Vec(
+            const selectionTo = Grid.snap(input.mouseWorldPos);
+            const smallestDimensions = Grid.toGrid(new Vec(
                 Math.min(this.selection.x, selectionTo.x),
                 Math.min(this.selection.y, selectionTo.y)
-            );
-            const biggestDimensions = new Vec(
+            ));
+            const biggestDimensions = Grid.toGrid(new Vec(
                 Math.max(this.selection.x, selectionTo.x),
                 Math.max(this.selection.y, selectionTo.y)
-            );
+            ));
             let tiles = [];
-            for (let x = smallestDimensions.x; x <= biggestDimensions.x; x++) {
-                for (let y = smallestDimensions.y; y <= biggestDimensions.y; y++) {
+            for (let y = smallestDimensions.y; y <= biggestDimensions.y; y++) {
+                for (let x = smallestDimensions.x; x <= biggestDimensions.x; x++) {
                     tiles.push(this.editor.map.getBlock(new Vec(x, y)));
                 }
             }
-            this.editor.brush.setTiles(tiles, biggestDimensions.x - smallestDimensions.x);
+            this.editor.brush.setTiles(tiles, biggestDimensions.x - smallestDimensions.x + 1);
             this.selection = null;
         } else if (input.rightMousePressed && !this.selection) {
             this.selection = Grid.snap(input.mouseWorldPos);
@@ -42,9 +42,17 @@ export class PipetteTool {
         if (this.selection) {
             const {input, ctx} = canvas;
 
-            let selectionTo = Grid.snap(input.mouseWorldPos).sub(this.selection);
+            const selectionTo = Grid.snap(input.mouseWorldPos);
+            const smallestDimensions = Grid.snap(new Vec(
+                Math.min(this.selection.x, selectionTo.x),
+                Math.min(this.selection.y, selectionTo.y)
+            ));
+            const selectionSize = Grid.snap(new Vec(
+                Math.max(this.selection.x, selectionTo.x),
+                Math.max(this.selection.y, selectionTo.y)
+            )).add(Grid.size, Grid.size).sub(smallestDimensions);
             ctx.strokeStyle = "white";
-            ctx.strokeRect(this.selection.x, this.selection.y, selectionTo.x, selectionTo.y);
+            ctx.strokeRect(smallestDimensions.x, smallestDimensions.y, selectionSize.x, selectionSize.y);
         }
     }
 }
