@@ -2,19 +2,23 @@ import {Brush} from "./brush.js";
 import {Grid} from "../map/grid.js";
 import Menu from "./menu.js";
 import Vec from "../vec.js";
+import {EditorCameraControl} from "./editor-camera-control.js";
 
 export default class Editor {
     /**
+     * @param {Canvas} canvas
      * @param {Tilemap} map
      * @param {Brush} brush
      */
-    constructor(map, brush) {
+    constructor(canvas, map, brush) {
+        this.canvas = canvas;
         this.map = map;
         this.brush = brush;
         this.menu = new Menu(this);
         this.selection = null;
         this.children = [
             this.menu,
+            new EditorCameraControl(this),
         ];
     }
 

@@ -41,16 +41,10 @@ export class BrushSelection {
         if (!input.rightMouseDown && this.selection) {
             let selectionTo = this.spritePosByScreenPos(input.mousePos);
             if (selectionTo) {
-                const smallestDimensions = new Vec(
-                        Math.min(this.selection.x, selectionTo.x),
-                        Math.min(this.selection.y, selectionTo.y)
-                    )
+                const smallestDimensions = Vec.minBounds(this.selection, selectionTo)
                     .scale(1 / this.blocksize)
                 ;
-                const biggestDimensions = new Vec(
-                        Math.max(this.selection.x, selectionTo.x),
-                        Math.max(this.selection.y, selectionTo.y)
-                    )
+                const biggestDimensions = Vec.maxBounds(this.selection, selectionTo)
                     .scale(1 / this.blocksize)
                 ;
                 let tiles = [];
@@ -84,16 +78,10 @@ export class BrushSelection {
 
         if (this.selection) {
             let selectionTo = this.spritePosByScreenPos(input.mousePos);
-            const smallestDimensions = new Vec(
-                    Math.min(this.selection.x, selectionTo.x),
-                    Math.min(this.selection.y, selectionTo.y)
-                )
+            const smallestDimensions = Vec.minBounds(this.selection, selectionTo)
                 .add(this.pos)
             ;
-            const selectionSize = new Vec(
-                    Math.max(this.selection.x, selectionTo.x),
-                    Math.max(this.selection.y, selectionTo.y)
-                )
+            const selectionSize = Vec.maxBounds(this.selection, selectionTo)
                 .add(this.pos)
                 .add(this.blocksize, this.blocksize)
                 .sub(smallestDimensions)

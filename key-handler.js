@@ -9,28 +9,11 @@ import {FarmAnimal} from "./animals/farm-animal.js";
 import {Camera} from "./camera.js";
 
 export class KeyHandler {
-    get speed() {
-        return 3;
-    }
-
     /**
      * @param {Canvas} canvas
      */
     update(canvas) {
         const {input, camera} = canvas;
-        const dirs = {
-            'ArrowLeft': new Vec(-1, 0),
-            'ArrowRight': new Vec(1, 0),
-            'ArrowUp': new Vec(0, -1),
-            'ArrowDown': new Vec(0, 1),
-        };
-        let movement = new Vec();
-        for (let [key, dir] of Object.entries(dirs)) {
-            if (input.keydown(key)) {
-                movement = movement.add(dir);
-            }
-        }
-        camera.moveBy(movement.scale(-this.speed));
 
         if (input.keypressed('Escape')) {
             camera.unlock();

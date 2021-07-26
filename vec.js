@@ -111,14 +111,22 @@ export default class Vec {
         let dist = abapProduct / magnitudeAB;
 
         if (dist < 0) {
-            return a;
+            return a.clone();
         } else if (dist > 1) {
-            return b;
+            return b.clone();
         }
         return a.add(ab.scale(dist));
     }
 
     toString() {
         return '(' + this.x + ', ' + this.y + ')';
+    }
+
+    static minBounds(...vecs) {
+        return new Vec(Math.min(...vecs.map(vec => vec.x)), Math.min(...vecs.map(vec => vec.y)));
+    }
+
+    static maxBounds(...vecs) {
+        return new Vec(Math.max(...vecs.map(vec => vec.x)), Math.max(...vecs.map(vec => vec.y)));
     }
 };

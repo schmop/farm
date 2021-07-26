@@ -55,7 +55,6 @@ class Canvas {
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
         this.camera.applyTransformation();
-        console.log("reset to", this.width, this.height);
     }
 
     init() {
@@ -165,7 +164,7 @@ window.Canvas.add(new KeyHandler());
 
 const tilemap = new Tilemap(new Ground());
 const brush = new Brush([tilemap.tileset.randomTile()], 1);
-const editor = new Editor(tilemap, brush);
+const editor = new Editor(window.Canvas, tilemap, brush);
 const pipette = new PipetteTool(editor);
 window.Canvas.add(brush, Canvas.LAYER_OVERLAY);
 window.Canvas.add(pipette, Canvas.LAYER_OVERLAY);

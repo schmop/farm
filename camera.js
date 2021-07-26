@@ -3,18 +3,11 @@ import {Rect} from "./rect.js";
 
 export class Camera {
     constructor(canvas) {
-        const {input} = canvas;
         this.canvas = canvas;
         this.zoom = 1;
         this.pos = new Vec(0, 0);
         this.rotateAngle = 0;
         this.lockedObject = null;
-
-        input.onWheel(event => {
-            const scale = -Math.sign(event.deltaY) * 0.1;
-            const mousePos = input.mousePos.clone();
-            canvas.camera.zoomBy(scale, mousePos);
-        });
     }
 
     get ctx() {
@@ -110,15 +103,11 @@ export class Camera {
         this.lockedObject = null;
     }
 
-    clipCircle(center, radius) {
-        this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-        this.ctx.clip();
-    }
-
-    unclip() {
-        this.ctx.restore();
+    screenToScene(pos) {
+        return pos
+            .scale(1 / this.zoom)
+            .add(this.pos)
+        ;
     }
 
     /**

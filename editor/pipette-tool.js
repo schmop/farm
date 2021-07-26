@@ -15,14 +15,8 @@ export class PipetteTool {
 
         if (!input.rightMouseDown && this.selection) {
             const selectionTo = Grid.snap(input.mouseWorldPos);
-            const smallestDimensions = Grid.toGrid(new Vec(
-                Math.min(this.selection.x, selectionTo.x),
-                Math.min(this.selection.y, selectionTo.y)
-            ));
-            const biggestDimensions = Grid.toGrid(new Vec(
-                Math.max(this.selection.x, selectionTo.x),
-                Math.max(this.selection.y, selectionTo.y)
-            ));
+            const smallestDimensions = Grid.toGrid(Vec.minBounds(this.selection, selectionTo));
+            const biggestDimensions = Grid.toGrid(Vec.maxBounds(this.selection, selectionTo));
             let tiles = [];
             for (let y = smallestDimensions.y; y <= biggestDimensions.y; y++) {
                 for (let x = smallestDimensions.x; x <= biggestDimensions.x; x++) {
@@ -43,14 +37,11 @@ export class PipetteTool {
             const {input, ctx} = canvas;
 
             const selectionTo = Grid.snap(input.mouseWorldPos);
-            const smallestDimensions = Grid.snap(new Vec(
-                Math.min(this.selection.x, selectionTo.x),
-                Math.min(this.selection.y, selectionTo.y)
-            ));
-            const selectionSize = Grid.snap(new Vec(
-                Math.max(this.selection.x, selectionTo.x),
-                Math.max(this.selection.y, selectionTo.y)
-            )).add(Grid.size, Grid.size).sub(smallestDimensions);
+            const smallestDimensions = Grid.snap(Vec.minBounds(this.selection, selectionTo));
+            const selectionSize = Grid.snap(Vec.maxBounds(this.selection, selectionTo))
+                .add(Grid.size, Grid.size)
+                .sub(smallestDimensions)
+            ;
             ctx.strokeStyle = "white";
             ctx.strokeRect(smallestDimensions.x, smallestDimensions.y, selectionSize.x, selectionSize.y);
         }

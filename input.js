@@ -9,6 +9,8 @@ export class Input {
         this._mousePressed = false;
         this._rightMouseDown = false;
         this._rightMousePressed = false;
+        this._middleMouseDown = false;
+        this._middleMousePressed = false;
         this.canvas = canvas;
 
         document.addEventListener('keydown', event => {
@@ -27,6 +29,9 @@ export class Input {
         document.addEventListener('mouseup', event => {
             if (event.button === 0) {
                 this._mouseDown = false;
+            } else if (event.button === 1) {
+                this._middleMouseDown = false;
+                this._middleMousePressed = false;
             } else if (event.button === 2) {
                 this._rightMouseDown = false;
             }
@@ -35,6 +40,10 @@ export class Input {
             if (event.button === 0) {
                 this._mouseDown = true;
                 this._mousePressed = true;
+            } else if (event.button === 1) {
+                this._middleMouseDown = true;
+                this._middleMousePressed = true;
+                event.preventDefault();
             } else if (event.button === 2) {
                 this._rightMouseDown = true;
                 this._rightMousePressed = true;
@@ -53,6 +62,7 @@ export class Input {
         this.keypresses.clear();
         this._mousePressed = false;
         this._rightMousePressed = false;
+        this._middleMousePressed = false;
     }
 
     keydown(key) {
@@ -68,10 +78,7 @@ export class Input {
     }
 
     get mouseWorldPos() {
-        return this._mousePos
-            .scale(1 / this.canvas.camera.zoom)
-            .add(this.canvas.camera.pos)
-        ;
+        return this.canvas.camera.screenToScene(this._mousePos);
     }
 
     get mouseDown() {
@@ -88,6 +95,14 @@ export class Input {
 
     get rightMousePressed() {
         return this._rightMousePressed;
+    }
+
+    get middleMouseDown() {
+        return this._middleMouseDown;
+    }
+
+    get middleMousePressed() {
+        return this._middleMousePressed;
     }
 
     onClick(callback) {
