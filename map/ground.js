@@ -70,7 +70,7 @@ export class Ground extends Tileset {
         this.tiles = new Map(data.map(([x, y, type]) => {
             const pos = new Vec(x,y).scale(this.size);
 
-            return [pos.toString(), new Tile(this, pos, type)];
+            return [pos.toString(), new Tile(pos, type)];
         }));
     }
 }

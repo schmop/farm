@@ -21,7 +21,7 @@ export class BrushSelection {
     }
 
     get tileset() {
-        return this.parent.editor.map.tileset;
+        return this.parent.editor.activeLayer.tileset;
     }
 
     get blocksize() {
@@ -69,7 +69,7 @@ export class BrushSelection {
 
         this.tileset.tiles.forEach(tile => {
             const renderPos = this.pos.add(tile.spritePos);
-            tile.render(canvas, renderPos);
+            tile.render(canvas, renderPos, this.tileset);
             if (!this.selection && Rect.bySize(renderPos, new Vec(this.blocksize, this.blocksize)).contains(input.mousePos)) {
                 ctx.fillStyle = "white";
                 ctx.strokeRect(renderPos.x, renderPos.y, this.blocksize, this.blocksize);

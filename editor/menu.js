@@ -15,11 +15,10 @@ export default class Menu {
         this.size = new Vec(500, 700);
         this.children = [
             new Button(
-                "Click me",
+                "Save",
                 new Rect(100, 100, 200, 150),
                 btn => {
-                    btn.label = "Clicked!";
-                    console.log("CLICKED");
+                    this.editor.save();
                 },
                 this
             ),

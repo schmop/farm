@@ -3,13 +3,13 @@ import {Input} from "./input.js";
 import {KeyHandler} from "./key-handler.js";
 import {Camera} from "./camera.js";
 import {AssetRepository} from "./asset-repository.js";
-import {Tilemap} from "./map/tilemap.js";
+import {TileLayer} from "./map/tile-layer.js";
 import {Ground} from "./map/ground.js";
 import Editor from "./editor/editor.js";
 import {Brush} from "./editor/brush.js";
 import {PipetteTool} from "./editor/pipette-tool.js";
 
-class Canvas {
+export class Canvas {
     static get LAYER_BACKGROUND() {
         return 0;
     }
@@ -64,14 +64,14 @@ class Canvas {
     }
 
     add(object, layer = this.constructor.LAYER_BACKGROUND) {
-        object.layer = layer;
+        object._layer = layer;
         if (layer === this.constructor.LAYER_UI) {
             this.uiObjects.push(object);
             return;
         }
 
         this.objects.push(object);
-        this.objects.sort((a,b) => a.layer - b.layer);
+        this.objects.sort((a,b) => a._layer - b._layer);
     }
 
     remove(object) {
@@ -157,19 +157,3 @@ class Canvas {
         return Array(3).fill(null).map(() => Math.floor(Math.random() * 255));
     }
 }
-
-window.Canvas = new Canvas(document.getElementById("mieps"));
-
-window.Canvas.add(new KeyHandler());
-
-const tilemap = new Tilemap(new Ground());
-const brush = new Brush([tilemap.tileset.randomTile()], 1);
-const editor = new Editor(window.Canvas, tilemap, brush);
-const pipette = new PipetteTool(editor);
-window.Canvas.add(brush, Canvas.LAYER_OVERLAY);
-window.Canvas.add(pipette, Canvas.LAYER_OVERLAY);
-window.Canvas.add(editor, Canvas.LAYER_UI);
-window.Canvas.add(tilemap, Canvas.LAYER_SCENE);
-
-window.Canvas.init();
-

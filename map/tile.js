@@ -1,8 +1,7 @@
 import {Grid} from "./grid.js";
 
 export class Tile {
-    constructor(tileset, spritePos, type) {
-        this.tileset = tileset;
+    constructor(spritePos, type) {
         this.spritePos = spritePos;
         this.type = type;
     }
@@ -10,15 +9,16 @@ export class Tile {
     /**
      * @param {Canvas} canvas
      * @param {Vec} pos
+     * @param {Tileset} tileset
      */
-    render(canvas, pos) {
+    render(canvas, pos, tileset) {
         const {ctx, assets} = canvas;
         ctx.drawImage(
-            assets.get(this.tileset.getAsset()),
+            assets.get(tileset.getAsset()),
             this.spritePos.x,
             this.spritePos.y,
-            this.tileset.size,
-            this.tileset.size,
+            tileset.size,
+            tileset.size,
             pos.x,
             pos.y,
             Grid.size,

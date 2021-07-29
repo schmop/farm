@@ -2,7 +2,8 @@ import Vec from "../vec.js";
 import {Grid} from "../map/grid.js";
 
 export class Brush {
-    constructor(tiles = [], width = 0) {
+    constructor(editor, tiles = [], width = 0) {
+        this.editor = editor;
         this.setTiles(tiles, width);
     }
 
@@ -12,6 +13,10 @@ export class Brush {
         }
         this.tiles = tiles;
         this.width = width;
+    }
+
+    get tileset() {
+        return this.editor.activeLayer.tileset;
     }
 
     get height() {
@@ -53,8 +58,8 @@ export class Brush {
         for (let i = 0; i < this.tiles.length; i++) {
             const tile = this.tiles[i];
             if (tile) {
-                const pos = startPos.add(this.indexToPos(i).scale(tile.tileset.size));
-                tile.render(canvas, pos);
+                const pos = startPos.add(this.indexToPos(i).scale(this.tileset.size));
+                tile.render(canvas, pos, this.tileset);
             }
         }
     }

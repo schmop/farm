@@ -1,25 +1,33 @@
 import {Brush} from "./brush.js";
 import {Grid} from "../map/grid.js";
+import {Canvas} from '../canvas.js';
 import Menu from "./menu.js";
 import Vec from "../vec.js";
 import {EditorCameraControl} from "./editor-camera-control.js";
+import MapSaver from "../map/map-saver.js";
 
 export default class Editor {
     /**
      * @param {Canvas} canvas
-     * @param {Tilemap} map
-     * @param {Brush} brush
+     * @param {GameMap} map
      */
-    constructor(canvas, map, brush) {
+    constructor(canvas, map) {
         this.canvas = canvas;
         this.map = map;
-        this.brush = brush;
+        this.activeLayer = this.map.getLayer(0);
+        this.brush = new Brush(this, [this.activeLayer.tileset.randomTile()], 1);
         this.menu = new Menu(this);
         this.selection = null;
         this.children = [
             this.menu,
             new EditorCameraControl(this),
         ];
+
+        canvas.add(this.brush, Canvas.LAYER_OVERLAY);
+    }
+
+    save() {
+        MapSaver.save(this.map);
     }
 
     /**
@@ -46,7 +54,7 @@ export default class Editor {
         ;
         for (let x = 0; x < this.brush.width; x++) {
             for (let y = 0; y < this.brush.height; y++) {
-                this.map.setBlock(pos.add(x, y), this.brush.get(x,y));
+                this.activeLayer.setBlock(pos.add(x, y), this.brush.get(x,y));
             }
         }
     }

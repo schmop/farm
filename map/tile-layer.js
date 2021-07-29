@@ -1,12 +1,13 @@
 import {Grid} from "./grid.js";
 import {Tile} from "./tile.js";
 
-export class Tilemap {
+export class TileLayer {
     /**
      * @param {Tileset} tileset
+     * @param blocks
      */
-    constructor(tileset) {
-        this.blocks = new Map();
+    constructor(tileset, blocks = []) {
+        this.blocks = new Map(blocks);
         this.tileset = tileset;
     }
 
@@ -37,7 +38,7 @@ export class Tilemap {
                 const pos = startPos.add(i, j);
                 const block = this.blocks.get(pos.toString());
                 if (block) {
-                    block.render(canvas, Grid.toWorld(pos));
+                    block.render(canvas, Grid.toWorld(pos), this.tileset);
                 }
             }
         }
